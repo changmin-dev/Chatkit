@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 from FlaskWebProject1 import app
 
 #app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'c:/cmk' #'d:/home/site'
+app.config['UPLOAD_FOLDER'] = 'd:/home/site'
 
 UPLOAD_FOLDER = 'c:/cmk'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])

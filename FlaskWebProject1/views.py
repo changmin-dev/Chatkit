@@ -20,8 +20,10 @@ def allowed_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
+        print('post!')
         # check if the post request has the file part
         if 'file' not in request.files:
+            print('not in request.files')
             return redirect(request.url)
         file = request.files['file']
         # if user does not select file, browser also
@@ -29,6 +31,7 @@ def upload_file():
         if file.filename == '':
             return redirect(request.url)
         if file and allowed_file(file.filename):
+            print('save file!')
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return 'good!'

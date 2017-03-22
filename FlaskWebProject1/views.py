@@ -3,7 +3,7 @@ Routes and views for the flask application.
 """
 import os
 from datetime import datetime
-from flask import Flask, request, redirect, url_for, render_template, send_from_directory
+from flask import Flask, request, redirect, url_for, render_template, send_from_directory, send_file
 from werkzeug.utils import secure_filename
 from FlaskWebProject1 import app
 
@@ -50,7 +50,9 @@ def upload_file():
     '''
 @app.route('/image/<string:filename>')
 def send_image(filename):
-    return  send_from_directory("images", filename)
+    target = os.path.join(APP_ROOT, 'images/')
+    image = os.path.join("/".join([target, filename]))
+    return  send_file(image)#send_from_directory("images", filename)
 
 @app.route('/home')
 def home():

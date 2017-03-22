@@ -3,14 +3,15 @@ Routes and views for the flask application.
 """
 import os
 from datetime import datetime
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, send_from_directory
 from werkzeug.utils import secure_filename
 from FlaskWebProject1 import app
 
 #app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'd:/home/site'
+#app.config['UPLOAD_FOLDER'] = './image'#'d:/home/site/image'
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-UPLOAD_FOLDER = 'c:/cmk'
+#UPLOAD_FOLDER = 'c:/cmk'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 def allowed_file(filename):
@@ -32,8 +33,11 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             print('save file!')
+            target = os.path.join(APP_ROOT, 'images/')
+            if not os.path.isdir(target):
+                os.mkdir(target)
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join("/".join([target, filename])))
             return 'good!'
     return '''
     <!doctype html>
@@ -44,7 +48,10 @@ def upload_file():
          <input type=submit value=Upload>
     </form>
     '''
-        
+@app.route('/image/<string:filename>')
+def send_image(filename):
+    return  send_from_directory("images", filename)
+
 @app.route('/home')
 def home():
     

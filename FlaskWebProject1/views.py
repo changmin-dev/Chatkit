@@ -10,6 +10,7 @@ from FlaskWebProject1 import app
 import sqlite3
 from flask import jsonify
 
+app.debug = True
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])

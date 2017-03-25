@@ -44,3 +44,7 @@ gm.setLevel(logging.ERROR)
  
 logger.addHandler(gm)
  
+try:
+    1/0
+except:
+    logger.exception('FFFFFFFFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUU-')

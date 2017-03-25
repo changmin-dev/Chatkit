@@ -36,11 +36,12 @@ def insert_image_info(filename):
             cur.execute("INSERT INTO photo (name, store_date) VALUES (?, DATE('now'))", (filename,) )
             
             con.commit()
-            print("Record successfully added")
+            logging.info("Record successfully added")
     except:
         con.rollback()
-        print("error in insert operation")
-    
+        logging.info("error in insert operation")
+        con.close()
+        return "ERROR"
     finally:
         con.close()
 
@@ -81,24 +82,6 @@ def send_image(filename):
     target = os.path.join(APP_ROOT, 'images/')
     image = os.path.join("/".join([target, filename]))
     return  send_file(image)#send_from_directory("images", filename)
-
-@app.route('/test/<string:filename>')
-def insert_imagename(filename):
-    try:     
-        with sqlite3.connect("database.db") as con:
-            cur = con.cursor()
-            cur.execute("INSERT INTO photo (name, store_date) VALUES (?, DATE('now'))", (filename,) )
-            
-            con.commit()
-            print("Record successfully added")
-    except:
-        con.rollback()
-        print("error in insert operation")
-    
-    finally:
-        return redirect('/list') 
-        con.close()
-    return  redirect('/list')
 
 @app.route('/list_origin')
 def list1():

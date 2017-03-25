@@ -80,10 +80,10 @@ def list1():
    cur = con.cursor()
    cur.execute("select * from photo")
    
-   r = [dict((cur.description[i][0], value) \
-               for i, value in enumerate(row)) for row in cur.fetchall()]
+   #r = [dict((cur.description[i][0], value) for i, value in enumerate(row)) for row in cur.fetchall()]
+   rows = cur.fetchall()
    con.close()
-   return jsonify(r)#render_template("list.html", rows = rows)
+   return render_template("list.html", rows = rows) #jsonify(r)#
 
 @app.route('/list')
 def list2():
@@ -96,10 +96,10 @@ def list2():
                 ) As Integer) as elapse_date\
                 FROM (SELECT name, store_date FROM photo) photos")
    
-   r = [dict((cur.description[i][0], value) \
-               for i, value in enumerate(row)) for row in cur.fetchall()]
+   #r = [dict((cur.description[i][0], value) for i, value in enumerate(row)) for row in cur.fetchall()]
+   rows = cur.fetchall()
    con.close()
-   return jsonify(r)#render_template("list2.html", rows = rows)
+   return render_template("list2.html", rows = rows) #jsonify(r)#
 
   
 

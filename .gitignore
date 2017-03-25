@@ -34,3 +34,6 @@ coverage.xml
 
 # Django stuff:
 *.log
+
+# sqlite3
+*.db

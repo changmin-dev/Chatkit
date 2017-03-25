@@ -7,16 +7,32 @@ from flask import Flask, request, redirect, url_for, render_template, send_from_
 from werkzeug.utils import secure_filename
 from FlaskWebProject1 import app
 
-#app = Flask(__name__)
-#app.config['UPLOAD_FOLDER'] = './image'#'d:/home/site/image'
+import sqlite3
+from flask import jsonify
+
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-#UPLOAD_FOLDER = 'c:/cmk'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def insert_image_info(filename):
+    try:     
+        with sqlite3.connect("database.db") as con:
+            cur = con.cursor()
+            cur.execute("INSERT INTO photo (name, store_date) VALUES (?, DATE('now'))", (filename,) )
+            
+            con.commit()
+            print("Record successfully added")
+    except:
+        con.rollback()
+        print("error in insert operation")
+    
+    finally:
+        con.close()
+
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -38,6 +54,7 @@ def upload_file():
                 os.mkdir(target)
             filename = secure_filename(file.filename)
             file.save(os.path.join("/".join([target, filename])))
+            insert_image_info(filename)
             return 'good!'
     return '''
     <!doctype html>
@@ -53,6 +70,55 @@ def send_image(filename):
     target = os.path.join(APP_ROOT, 'images/')
     image = os.path.join("/".join([target, filename]))
     return  send_file(image)#send_from_directory("images", filename)
+
+@app.route('/test/<string:filename>')
+def insert_imagename(filename):
+    try:     
+        with sqlite3.connect("database.db") as con:
+            cur = con.cursor()
+            cur.execute("INSERT INTO photo (name, store_date) VALUES (?, DATE('now'))", (filename,) )
+            
+            con.commit()
+            print("Record successfully added")
+    except:
+        con.rollback()
+        print("error in insert operation")
+    
+    finally:
+        return redirect('/list') 
+        con.close()
+    return  redirect('/list')
+
+@app.route('/list_origin')
+def list1():
+   con = sqlite3.connect("database.db")
+   con.row_factory = sqlite3.Row
+   
+   cur = con.cursor()
+   cur.execute("select * from photo")
+   
+   r = [dict((cur.description[i][0], value) \
+               for i, value in enumerate(row)) for row in cur.fetchall()]
+   con.close()
+   return jsonify(r)#render_template("list.html", rows = rows)
+
+@app.route('/list')
+def list2():
+   con = sqlite3.connect("database.db")
+   con.row_factory = sqlite3.Row
+   
+   cur = con.cursor()
+   cur.execute("SELECT name, store_date , Cast ((\
+                JulianDay('now') - JulianDay(store_date)\
+                ) As Integer) as elapse_date\
+                FROM (SELECT name, store_date FROM photo) photos")
+   
+   r = [dict((cur.description[i][0], value) \
+               for i, value in enumerate(row)) for row in cur.fetchall()]
+   con.close()
+   return jsonify(r)#render_template("list2.html", rows = rows)
+
+  
 
 @app.route('/home')
 def home():

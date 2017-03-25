@@ -10,16 +10,6 @@ from FlaskWebProject1 import app
 import sqlite3
 from flask import jsonify
 
-import logging
-from logger import TlsSMTPHandler
-
-logger = logging.getLogger()
- 
-gm = TlsSMTPHandler(("smtp.gmail.com", 587), 'bugs@my_company.com', ['admin@showmethecode.com'], 'Error found!', ('twibeat22@gmail.com', 'twice2222'))
-gm.setLevel(logging.ERROR)
- 
-logger.addHandler(gm)
-
 app.debug = True
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -36,11 +26,10 @@ def insert_image_info(filename):
             cur.execute("INSERT INTO photo (name, store_date) VALUES (?, DATE('now'))", (filename,) )
             
             con.commit()
-            logging.info("Record successfully added")
+            print("Record successfully added")
     except:
         con.rollback()
-        logging.info("error in insert operation")
-        con.close()
+        print("error in insert operation")
         return "ERROR"
     finally:
         con.close()

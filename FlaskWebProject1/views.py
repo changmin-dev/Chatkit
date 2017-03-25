@@ -150,3 +150,26 @@ def about():
         year=datetime.now().year,
         message='Your application description page.'
     )
+
+import logging 
+from logging.handlers import RotatingFileHandler 
+from logging import Formatter 
+app.config['LOGGING_LEVEL'] = logging.DEBUG 
+app.config['LOGGING_FORMAT'] = '%(asctime)s %(levelname)s: %(message)s in %(filename)s:%(lineno)d]' 
+app.config['LOGGING_LOCATION'] = 'abuse_detect_logs/' 
+app.config['LOGGING_FILENAME'] = 'abuse_detect.log' 
+app.config['LOGGING_MAX_BYTES'] = 100000 
+app.config['LOGGING_BACKUP_COUNT'] = 1000
+ # logging 
+
+
+if not app.debug: 
+    log_dir = os.path.join(app.config['HOME_DIR'], app.config['LOGGING_LOCATION']) 
+    file_util.ensure_dir_exists(log_dir) 
+    file_handler = RotatingFileHandler(app.config['LOGGING_LOCATION'] + app.config['LOGGING_FILENAME'], 
+                                        maxBytes=app.config['LOGGING_MAX_BYTES'], 
+                                        backupCount=app.config['LOGGING_BACKUP_COUNT']) 
+    file_handler.setFormatter(Formatter(app.config['LOGGING_FORMAT'])) 
+    file_handler.setLevel(app.config['LOGGING_LEVEL']) 
+    app.logger.addHandler(file_handler) 
+    app.logger.info("logging start")

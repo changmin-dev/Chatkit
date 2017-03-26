@@ -91,10 +91,12 @@ def list2():
    con.row_factory = sqlite3.Row
    
    cur = con.cursor()
-   cur.execute("SELECT name, store_date , Cast ((\
-                JulianDay('now') - JulianDay(store_date)\
-                ) As Integer) as elapse_date\
-                FROM (SELECT name, store_date FROM photo) photos")
+   cur.execute("SELECT name, store_date, elapse_date\
+                FROM (SELECT name, store_date , Cast ((\
+                    JulianDay('now') - JulianDay(store_date)\
+                    ) As Integer) as elapse_date\
+                    FROM (SELECT name, store_date FROM photo))\
+                WHERE elapse_date > 6")
    
    r = [dict((cur.description[i][0], value) for i, value in enumerate(row)) for row in cur.fetchall()]
    
@@ -119,32 +121,34 @@ def clear():
         con.close()
         return "Delete all food"
 
-@app.route('/home')
-def home():
+
+
+# @app.route('/home')
+# def home():
     
-    """Renders the home page."""
-    return render_template(
-        'index.html',
-        title='Home Page',
-        year=datetime.now().year,
-    )
+#     """Renders the home page."""
+#     return render_template(
+#         'index.html',
+#         title='Home Page',
+#         year=datetime.now().year,
+#     )
 
-@app.route('/contact')
-def contact():
-    """Renders the contact page."""
-    return render_template(
-        'contact.html',
-        title='Contact',
-        year=datetime.now().year,
-        message='Your contact page.'
-    )
+# @app.route('/contact')
+# def contact():
+#     """Renders the contact page."""
+#     return render_template(
+#         'contact.html',
+#         title='Contact',
+#         year=datetime.now().year,
+#         message='Your contact page.'
+#     )
 
-@app.route('/about')
-def about():
-    """Renders the about page."""
-    return render_template(
-        'about.html',
-        title='About',
-        year=datetime.now().year,
-        message='Your application description page.'
-    )
+# @app.route('/about')
+# def about():
+#     """Renders the about page."""
+#     return render_template(
+#         'about.html',
+#         title='About',
+#         year=datetime.now().year,
+#         message='Your application description page.'
+#     )

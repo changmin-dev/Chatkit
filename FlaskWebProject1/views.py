@@ -66,6 +66,27 @@ def upload_file():
          <input type=submit value=Upload>
     </form>
     '''
+@app.route('/update_name', methods=['POST'])
+def update_name():
+    if request.method == 'POST':
+        name = request.form['name']
+        id = request.form['id']
+        print(name)
+        try:     
+            with sqlite3.connect("database.db") as con:
+                cur = con.cursor()
+                print("EE")
+                cur.execute("UPDATE photo (name) VALUES (?) WHERE id=(?)", (name, id) )
+                
+                con.commit()
+                print("Record successfully updated")
+        except:
+            con.rollback()
+            print("error in update operation")
+            return "ERROR"
+        finally:
+            con.close()
+
 @app.route('/image/<string:filename>')
 def send_image(filename):
     target = os.path.join(APP_ROOT, 'images/')

@@ -75,8 +75,7 @@ def update_name():
         try:     
             with sqlite3.connect("database.db") as con:
                 cur = con.cursor()
-                print("EE")
-                cur.execute("UPDATE photo (name) VALUES (?) WHERE id=(?)", (name, id) )
+                cur.execute("UPDATE photo SET name=? WHERE id=?", (name, id) )
                 
                 con.commit()
                 print("Record successfully updated")
@@ -86,7 +85,7 @@ def update_name():
             return "ERROR"
         finally:
             con.close()
-
+        return "Good!"
 @app.route('/image/<string:filename>')
 def send_image(filename):
     target = os.path.join(APP_ROOT, 'images/')

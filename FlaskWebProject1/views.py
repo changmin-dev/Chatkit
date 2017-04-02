@@ -23,7 +23,7 @@ def insert_image_info(filename):
     try:     
         with sqlite3.connect("database.db") as con:
             cur = con.cursor()
-            cur.execute("INSERT INTO photo (name, store_date) VALUES (?, DATE('now'))", (filename,) )
+            cur.execute("INSERT INTO photo (file_name, store_date) VALUES (?, DATE('now'))", (filename,) )
             
             con.commit()
             print("Record successfully added")

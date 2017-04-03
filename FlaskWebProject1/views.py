@@ -113,10 +113,10 @@ def list2():
    
    cur = con.cursor()
    cur.execute("SELECT name, file_name ,store_date, elapse_date\
-                FROM (SELECT name, store_date , Cast ((\
+                FROM (SELECT name, file_name ,store_date , Cast ((\
                     JulianDay('now') - JulianDay(store_date)\
                     ) As Integer) as elapse_date\
-                    FROM (SELECT name, store_date FROM photo))\
+                    FROM (SELECT name, file_name, store_date FROM photo))\
                 WHERE elapse_date > 6")
    
    r = [dict((cur.description[i][0], value) for i, value in enumerate(row)) for row in cur.fetchall()]

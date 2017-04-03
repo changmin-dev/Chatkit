@@ -86,6 +86,39 @@ def update_name():
             con.close()
         return "Good!"
 
+@app.route('/delete_food',methods =['POST'])
+def delete_food():
+    if request.method == 'POST':
+        name = request.form['name']
+        try:
+            with sqlite3.connect("database.db") as con:
+                cur = con.cursor()
+                cur.execute("DELETE FROM photo WHERE name=?",(name,))
+                con.commit()
+        except:
+            con.rollback()
+            return "ERROR"
+        finally:
+            con.close()
+        return "Good!"
+
+@app.route('/insert_food', methods=['POST'])
+def insert_food():
+    if request.method == 'POST':
+        name = request.form['name']
+        try:
+            with sqlite3.connect("database.db") as con:
+                cur = con.cursor()
+                cur.execute("INSERT INTO photo (name, store_date) VALUES (?, DATE('now'))", (name,))
+                
+                con.commit()
+        except:
+            con.rollback()
+            return "ERROR"
+        finally:
+            con.close()
+        return "Good!"
+
 @app.route('/image/<string:filename>')
 def send_image(filename):
     target = os.path.join(APP_ROOT, 'images/')

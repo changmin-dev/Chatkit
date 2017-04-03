@@ -86,6 +86,7 @@ def update_name():
         finally:
             con.close()
         return "Good!"
+
 @app.route('/image/<string:filename>')
 def send_image(filename):
     target = os.path.join(APP_ROOT, 'images/')
@@ -111,7 +112,7 @@ def list2():
    con.row_factory = sqlite3.Row
    
    cur = con.cursor()
-   cur.execute("SELECT name, store_date, elapse_date\
+   cur.execute("SELECT name, file_name ,store_date, elapse_date\
                 FROM (SELECT name, store_date , Cast ((\
                     JulianDay('now') - JulianDay(store_date)\
                     ) As Integer) as elapse_date\

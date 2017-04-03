@@ -71,7 +71,6 @@ def update_name():
     if request.method == 'POST':
         name = request.form['name']
         id = request.form['id']
-        print(name)
         try:     
             with sqlite3.connect("database.db") as con:
                 cur = con.cursor()

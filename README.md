@@ -1,7 +1,6 @@
-# Flask for Azure Web Apps [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
+Chatkit(Check Kitchen)
+---
+Chatbot을 이용한 주방 관리 시스템의 냉장고 서버
 
-Flask is a microframework for Python based on Werkzeug, Jinja 2 and good intentions. And before you ask: It's [BSD licensed](http://flask.pocoo.org/docs/license/).
-
-[Read the documentation or download as PDF](http://flask.pocoo.org/docs/0.10/)
-
-
+## 기타
+Azure의 WebApp인스턴스를 이용해 배포합니다.

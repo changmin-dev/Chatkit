@@ -1,6 +1,3 @@
-"""
-Routes and views for the flask application.
-"""
 import os
 from datetime import datetime
 from flask import Flask, request, redirect, url_for, render_template, send_from_directory, send_file
@@ -13,7 +10,7 @@ from flask import jsonify
 app.debug = True
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -37,6 +34,7 @@ def insert_image_info(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
+
     if request.method == 'POST':
         print('post!')
         # check if the post request has the file part
@@ -57,15 +55,17 @@ def upload_file():
             file.save(os.path.join("/".join([target, filename])))
             insert_image_info(filename)
             return 'good!'
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <p><input type=file name=file>
-         <input type=submit value=Upload>
-    </form>
-    '''
+    else:
+        #GET
+        return '''
+        <!doctype html>
+        <title>Upload new File</title>
+        <h1>Upload new File</h1>
+        <form method=post enctype=multipart/form-data>
+        <p><input type=file name=file>
+            <input type=submit value=Upload>
+        </form>
+        '''
 @app.route('/update_name', methods=['POST'])
 def update_name():
     if request.method == 'POST':
@@ -175,33 +175,3 @@ def clear():
         return "Delete all food"
 
 
-
-# @app.route('/home')
-# def home():
-    
-#     """Renders the home page."""
-#     return render_template(
-#         'index.html',
-#         title='Home Page',
-#         year=datetime.now().year,
-#     )
-
-# @app.route('/contact')
-# def contact():
-#     """Renders the contact page."""
-#     return render_template(
-#         'contact.html',
-#         title='Contact',
-#         year=datetime.now().year,
-#         message='Your contact page.'
-#     )
-
-# @app.route('/about')
-# def about():
-#     """Renders the about page."""
-#     return render_template(
-#         'about.html',
-#         title='About',
-#         year=datetime.now().year,
-#         message='Your application description page.'
-#     )

@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from flask import Flask, request, redirect, url_for, render_template, send_from_directory, send_file
 from werkzeug.utils import secure_filename
-from FlaskWebProject1 import app
+from ChatKit import app
 
 import sqlite3
 from flask import jsonify
@@ -12,9 +12,11 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 def insert_image_info(filename):
     try:     
@@ -56,7 +58,7 @@ def upload_file():
             insert_image_info(filename)
             return 'good!'
     else:
-        #GET
+        #GET - 테스트용
         return '''
         <!doctype html>
         <title>Upload new File</title>
@@ -119,11 +121,13 @@ def insert_food():
             con.close()
         return "Good!"
 
+
 @app.route('/image/<string:filename>')
 def send_image(filename):
     target = os.path.join(APP_ROOT, 'images/')
     image = os.path.join("/".join([target, filename]))
-    return  send_file(image)#send_from_directory("images", filename)
+    return  send_file(image)
+
 
 @app.route('/list_origin')
 def list1():
@@ -133,10 +137,10 @@ def list1():
    cur = con.cursor()
    cur.execute("select * from photo")
    
-   r = [dict((cur.description[i][0], value) for i, value in enumerate(row)) for row in cur.fetchall()]
-   #rows = cur.fetchall()
+   row = [dict((cur.description[i][0], value) for i, value in enumerate(row)) for row in cur.fetchall()]
    con.close()
-   return jsonify(foods=r) #render_template("list.html", rows = rows) #
+   return jsonify(foods=row) 
+
 
 @app.route('/list')
 def list2():
@@ -153,9 +157,9 @@ def list2():
    
    r = [dict((cur.description[i][0], value) for i, value in enumerate(row)) for row in cur.fetchall()]
    
-   #rows = cur.fetchall()
    con.close()
-   return jsonify(foods=r)#render_template("list2.html", rows = rows) #
+   return jsonify(foods=r)
+
 
 @app.route('/clear')
 def clear():

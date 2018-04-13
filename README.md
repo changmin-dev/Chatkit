@@ -3,8 +3,8 @@ Chatkit(Chat + Check Kitchen)
 Chatbot을 이용한 주방 관리 시스템의 냉장고 서버와 냉장고 카메라 제어 소스(Windows IOT)  
 전체가 아닌 담당한 부분 입니다.
 
-- ChatKitRefrigerator : 냉장고 카메라 제어 소스(MainPage.xaml.cs)
-- ChatKitWebserver : 냉장고 서버 소스(views.py)
+- ChatKitRefrigerator : 냉장고 카메라 제어
+- ChatKitWebserver : 냉장고 서버
 
 
 ## 시스템 구성
